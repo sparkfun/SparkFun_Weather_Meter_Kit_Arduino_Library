@@ -39,7 +39,9 @@ class SFEWeatherMeterKit
 
     // Helper functions
     float getVaneResistance();
+    uint32_t getWindSpeedCounts();
     uint32_t getRainfallCounts();
+    void resetWindSpeedFilter();
     void resetTotalRainfall();
 
     // Interrupt handlers. These need to be public to be called correctly, but

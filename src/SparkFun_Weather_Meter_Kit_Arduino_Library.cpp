@@ -247,6 +247,14 @@ float SFEWeatherMeterKit::getWindSpeed()
     return _windSpeed;
 }
 
+/// @brief Gets the number of wind speed counts
+/// @return Number of wind speed counts
+uint32_t SFEWeatherMeterKit::getWindSpeedCounts()
+{
+    // Return total wind speed counts
+    return _windCounts;
+}
+
 /// @brief Gets the number of rainfall counts
 /// @return Number of rainfall counts
 uint32_t SFEWeatherMeterKit::getRainfallCounts()
@@ -261,6 +269,14 @@ float SFEWeatherMeterKit::getTotalRainfall()
 {
     // Return total rainfall in mm
     return _rainfallCounts * mmPerRainfallCount;
+}
+
+/// @brief Resets the total rainfall
+void SFEWeatherMeterKit::resetWindSpeedFilter()
+{
+    _windSpeed = 0;
+    _windCounts = 0;
+    _lastWindSpeedMillis = millis();
 }
 
 /// @brief Resets the total rainfall
