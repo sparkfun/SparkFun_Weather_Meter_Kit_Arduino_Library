@@ -59,6 +59,7 @@ SFEWeatherMeterKit::SFEWeatherMeterKit(int windDirectionPin, int windSpeedPin, i
 
     // Reset counters to zero
     _rainfallCounts = 0;
+    _windCounts = 0;
     _windSpeed = 0;
 
     // Reset timers
@@ -111,7 +112,7 @@ float SFEWeatherMeterKit::getVaneResistance()
     float voltageRatio = (float)rawADC / windDirMaxADC;
 
     // Now calculate R_vane based on the equation above. Just need to make sure
-    // we don't dived by zero!
+    // we don't divide by zero!
     if ((1 - voltageRatio) != 0)
     {
         // Won't divide by zero, yay! Compute resistance from equation above
@@ -151,10 +152,8 @@ float SFEWeatherMeterKit::getWindDirection()
         }
     }
 
-    // Now compute the wind direction in degrees. Because there are 16 possible
-    // directions, there are 360 / 16 = 22.5 degrees per index
-    float degreesPerIndex = 22.5;
-    float direction = closestIndex * degreesPerIndex;
+    // Now compute the wind direction in degrees
+    float direction = closestIndex * SFE_WIND_VANE_DEGREES_PER_INDEX;
 
     // Return direction in degrees
     return direction;
@@ -200,7 +199,7 @@ void SFEWeatherMeterKit::updateWindSpeed()
     // Check how long it's been since the start of this measurement window
     if (dt < windSpeedMeasurementPeriodMillis)
     {
-        // Still within the current winow, nothing to do (count is not
+        // Still within the current window, nothing to do (count is not
         // incremented here, that's done by the interrupt handler)
     }
     else

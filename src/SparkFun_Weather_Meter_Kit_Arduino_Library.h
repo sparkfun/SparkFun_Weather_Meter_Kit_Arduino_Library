@@ -4,7 +4,7 @@
 #include "Arduino.h"
 
 // Enum to define the indexes for each wind direction
-enum SFEWeatherMeterKitAngles
+enum SFEWeatherMeterKitAnemometerAngles
 {
     WMK_ANGLE_0_0 = 0,
     WMK_ANGLE_22_5,
@@ -25,6 +25,8 @@ enum SFEWeatherMeterKitAngles
     WMK_NUM_ANGLES
 };
 
+#define SFE_WIND_VANE_DEGREES_PER_INDEX (360.0 / WMK_NUM_ANGLES)
+
 class SFEWeatherMeterKit
 {
   public:
@@ -37,17 +39,12 @@ class SFEWeatherMeterKit
     float getWindSpeed();
     float getTotalRainfall();
 
-    // Helper functions
+    // Helper functions. These can be helpful for sensor calibration
     float getVaneResistance();
     uint32_t getWindSpeedCounts();
     uint32_t getRainfallCounts();
     void resetWindSpeedFilter();
     void resetTotalRainfall();
-
-    // Interrupt handlers. These need to be public to be called correctly, but
-    // should not be called anywhere other than the .cpp file
-    static void windSpeedInterrupt();
-    static void rainfallInterrupt();
 
     // Calibration settings for each of the sensors. These can be changed as
     // needed to calibrate each sensor
@@ -62,6 +59,10 @@ class SFEWeatherMeterKit
   private:
     // Updates wind speed
     static void updateWindSpeed();
+
+    // Interrupt handlers
+    static void windSpeedInterrupt();
+    static void rainfallInterrupt();
 
     // Pins for each sensor
     int _windDirectionPin;
