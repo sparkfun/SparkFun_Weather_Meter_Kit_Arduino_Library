@@ -12,7 +12,7 @@ void setup()
     Serial.println("SparkFun Weather Meter Kit Example 1 - Basic Readings");
     Serial.println();
     Serial.println("Note - this example demonstrates the minimum code required");
-    Serial.println("for operation, but may not be accurate for your project.");
+    Serial.println("for operation, and may not be accurate for your project.");
     Serial.println("It is recommended to check out the calibration examples.");
 
     // Begin weather meter kit
