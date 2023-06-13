@@ -48,13 +48,13 @@ class SFEWeatherMeterKit
 
     // Calibration settings for each of the sensors. These can be changed as
     // needed to calibrate each sensor
-    int windDirPullUpVal;
-    int windDirMaxADC;
+    uint32_t windDirPullUpVal;
+    uint32_t windDirMaxADC;
     float vaneResistances[WMK_NUM_ANGLES];
-    int windSpeedMeasurementPeriodMillis;
+    uint32_t windSpeedMeasurementPeriodMillis;
     float kphPerCountPerSec;
     float mmPerRainfallCount;
-    float minMillisPerRainfall;
+    uint32_t minMillisPerRainfall;
 
   private:
     // Updates wind speed
@@ -67,8 +67,8 @@ class SFEWeatherMeterKit
 
     // Variables to track mesaurements
     float _windSpeed;
-    int _rainfallCounts;
-    int _windCounts;
+    uint32_t _rainfallCounts;
+    uint32_t _windCounts;
     uint32_t _lastWindSpeedMillis;
     uint32_t _lastRainfallMillis;
 };
