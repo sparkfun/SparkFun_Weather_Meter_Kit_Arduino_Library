@@ -139,7 +139,7 @@ float SFEWeatherMeterKit::getWindDirection()
     // is closest to our measurement, using a simple linear search
     float closestResistance = 1000000;
     int closestIndex = 0;
-    for (int i = 1; i < WMK_NUM_ANGLES; i++)
+    for (int i = 0; i < WMK_NUM_ANGLES; i++)
     {
         // Compute the difference between this resistance and what we measured
         float resistanceDifference = abs(vaneResistance - vaneResistances[i]);
