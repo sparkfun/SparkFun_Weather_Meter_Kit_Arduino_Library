@@ -5,6 +5,9 @@ int windDirectionPin = 35;
 int windSpeedPin = 14;
 int rainfallPin = 27;
 
+// Create an instance of the weather meter kit
+SFEWeatherMeterKit weatherMeterKit(windDirectionPin, windSpeedPin, rainfallPin);
+
 void setup()
 {
     // Begin serial
@@ -16,7 +19,7 @@ void setup()
     Serial.println("It is recommended to check out the calibration examples.");
 
     // Begin weather meter kit
-    weatherMeterKit.begin(windDirectionPin, windSpeedPin, rainfallPin);
+    weatherMeterKit.begin();
 }
 
 void loop()

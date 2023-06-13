@@ -1,20 +1,23 @@
 #include "SparkFun_Weather_Meter_Kit_Arduino_Library.h"
 
-/// @brief Interrupt handler for wind speed pin, calls weather meter's handler
-void windSpeedIRQ()
-{
-    weatherMeterKit.windSpeedInterrupt();
-}
-
-/// @brief Interrupt handler for rainfall pin, calls weather meter's handler
-void rainfallIRQ()
-{
-    weatherMeterKit.rainfallInterrupt();
-}
+// Static member definitions
+uint32_t SFEWeatherMeterKit::windSpeedMeasurementPeriodMillis;
+float SFEWeatherMeterKit::kphPerCountPerSec;
+uint32_t SFEWeatherMeterKit::minMillisPerRainfall;
+float SFEWeatherMeterKit::_windSpeed;
+uint32_t SFEWeatherMeterKit::_rainfallCounts;
+uint32_t SFEWeatherMeterKit::_windCounts;
+uint32_t SFEWeatherMeterKit::_lastWindSpeedMillis;
+uint32_t SFEWeatherMeterKit::_lastRainfallMillis;
 
 /// @brief Default constructor, sets default calibration values
-SFEWeatherMeterKit::SFEWeatherMeterKit()
+SFEWeatherMeterKit::SFEWeatherMeterKit(int windDirectionPin, int windSpeedPin, int rainfallPin)
 {
+    // Set sensors pins
+    _windDirectionPin = windDirectionPin;
+    _windSpeedPin = windSpeedPin;
+    _rainfallPin = rainfallPin;
+
     // Datasheet recommends a 10k pull up resistor, so that's what's assumed
     windDirPullUpVal = 10000;
 
@@ -67,21 +70,16 @@ SFEWeatherMeterKit::SFEWeatherMeterKit()
 /// @param windDirectionPin Wind direction pin, must have an ADC
 /// @param windSpeedPin Wind speed pin, must support interrupts
 /// @param rainfallPin Rainfall pin, must support interrupts
-void SFEWeatherMeterKit::begin(int windDirectionPin, int windSpeedPin, int rainfallPin)
+void SFEWeatherMeterKit::begin()
 {
-    // Set sensors pins
-    _windDirectionPin = windDirectionPin;
-    _windSpeedPin = windSpeedPin;
-    _rainfallPin = rainfallPin;
-
     // Set pins to inputs
     pinMode(_windDirectionPin, INPUT);
     pinMode(_windSpeedPin, INPUT);
     pinMode(_rainfallPin, INPUT);
 
     // Attach interr_upt handlers
-    attachInterrupt(digitalPinToInterrupt(_windSpeedPin), windSpeedIRQ, CHANGE);
-    attachInterrupt(digitalPinToInterrupt(_rainfallPin), rainfallIRQ, FALLING);
+    attachInterrupt(digitalPinToInterrupt(_windSpeedPin), windSpeedInterrupt, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(_rainfallPin), rainfallInterrupt, FALLING);
 }
 
 /// @brief Measures the resisance of the wind vane (assumes a voltage divider)
@@ -299,7 +297,3 @@ void SFEWeatherMeterKit::rainfallInterrupt()
     // Increment counter
     _rainfallCounts++;
 }
-
-// This library uses interrupts. Because the interrupt handlers must be static,
-// only 1 object can be created, which is done here
-SFEWeatherMeterKit weatherMeterKit;

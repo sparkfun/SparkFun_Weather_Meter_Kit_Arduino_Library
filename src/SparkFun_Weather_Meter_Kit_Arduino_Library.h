@@ -29,8 +29,8 @@ class SFEWeatherMeterKit
 {
   public:
     // Constructor
-    SFEWeatherMeterKit();
-    void begin(int windDirectionPin, int windSpeedPin, int rainfallPin);
+    SFEWeatherMeterKit(int windDirectionPin, int windSpeedPin, int rainfallPin);
+    void begin();
 
     // Data collection
     float getWindDirection();
@@ -44,22 +44,22 @@ class SFEWeatherMeterKit
 
     // Interrupt handlers. These need to be public to be called correctly, but
     // should not be called anywhere other than the .cpp file
-    void windSpeedInterrupt();
-    void rainfallInterrupt();
+    static void windSpeedInterrupt();
+    static void rainfallInterrupt();
 
     // Calibration settings for each of the sensors. These can be changed as
     // needed to calibrate each sensor
     uint32_t windDirPullUpVal;
     uint32_t windDirMaxADC;
     float vaneResistances[WMK_NUM_ANGLES];
-    uint32_t windSpeedMeasurementPeriodMillis;
-    float kphPerCountPerSec;
+    static uint32_t windSpeedMeasurementPeriodMillis;
+    static float kphPerCountPerSec;
     float mmPerRainfallCount;
-    uint32_t minMillisPerRainfall;
+    static uint32_t minMillisPerRainfall;
 
   private:
     // Updates wind speed
-    void updateWindSpeed();
+    static void updateWindSpeed();
 
     // Pins for each sensor
     int _windDirectionPin;
@@ -67,15 +67,11 @@ class SFEWeatherMeterKit
     int _rainfallPin;
 
     // Variables to track mesaurements
-    float _windSpeed;
-    uint32_t _rainfallCounts;
-    uint32_t _windCounts;
-    uint32_t _lastWindSpeedMillis;
-    uint32_t _lastRainfallMillis;
+    static float _windSpeed;
+    static uint32_t _rainfallCounts;
+    static uint32_t _windCounts;
+    static uint32_t _lastWindSpeedMillis;
+    static uint32_t _lastRainfallMillis;
 };
-
-// This library uses interrupts. Because the interrupt handlers must be static,
-// only 1 object can be created, which is done here
-extern SFEWeatherMeterKit weatherMeterKit;
 
 #endif
