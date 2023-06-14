@@ -8,11 +8,18 @@ int rainfallPin = 27;
 // Create an instance of the weather meter kit
 SFEWeatherMeterKit weatherMeterKit(windDirectionPin, windSpeedPin, rainfallPin);
 
+// Here we create a struct to hold all the calibration parameters
+SFEWeatherMeterKitCalibrationParams calibrationParams;
+
 void setup()
 {
     // Begin serial
     Serial.begin(115200);
     Serial.println("SparkFun Weather Meter Kit Example 3 - Calibration Helper");
+
+    // We'll be changing the calibration parameters one at a time, so we'll get
+    // all the default values now
+    calibrationParams = weatherMeterKit.getCalibrationParams();
 
     // Begin weather meter kit
     weatherMeterKit.begin();
@@ -62,7 +69,7 @@ void runVaneCalibrationHelper()
     Serial.println("which allows the internal resistor value to be measured. Enter");
     Serial.println("the pull up resistor value in Ohms (enter 10000 if not sure)");
     waitForUserInput();
-    weatherMeterKit.windDirPullUpVal = Serial.parseInt();
+    calibrationParams.windDirPullUpVal = Serial.parseInt();
 
     // Max ADC value
     Serial.println();
@@ -70,7 +77,10 @@ void runVaneCalibrationHelper()
     Serial.println("so the resolution needs to be known. Enter the max value of");
     Serial.println("your microcontroller's ADC (eg. for an 8-bit ADC, enter 255)");
     waitForUserInput();
-    weatherMeterKit.windDirMaxADC = Serial.parseInt();
+    calibrationParams.windDirMaxADC = Serial.parseInt();
+
+    // Set the pull up resistor and max ADC values
+    weatherMeterKit.setCalibrationParams(calibrationParams);
 
     Serial.println();
     Serial.println("Some of the wind vane resistor values are quite close to each");
@@ -110,7 +120,8 @@ void runVaneCalibrationHelper()
 
         // Set this as the new expected resistance for this angle
         float measuredResistance = weatherMeterKit.getVaneResistance();
-        weatherMeterKit.vaneResistances[i] = measuredResistance;
+        calibrationParams.vaneResistances[i] = measuredResistance;
+        weatherMeterKit.setCalibrationParams(calibrationParams);
 
         // Print value for user to see
         Serial.println();
@@ -138,7 +149,7 @@ void runVaneCalibrationHelper()
         // Print this angle / resistance pair
         Serial.print(currentAngle, 1);
         Serial.print(" degrees: ");
-        Serial.print(weatherMeterKit.vaneResistances[i]);
+        Serial.print(calibrationParams.vaneResistances[i]);
         Serial.println(" Ohms");
     }
 
@@ -204,7 +215,8 @@ void runRainfallCalibrationHelper()
     float mmPerCount = totalRainfallMM / weatherMeterKit.getRainfallCounts();
 
     // Set this as the new mm per count
-    weatherMeterKit.mmPerRainfallCount = mmPerCount;
+    calibrationParams.mmPerRainfallCount = mmPerCount;
+    weatherMeterKit.setCalibrationParams(calibrationParams);
 
     // Print value for user to see
     Serial.println();
@@ -232,7 +244,8 @@ void runAnemometerCalibrationHelper()
     int calibrationSeconds = Serial.parseInt();
 
     // Set filter measurement period as requested
-    weatherMeterKit.windSpeedMeasurementPeriodMillis = 1000 * calibrationSeconds;
+    calibrationParams.windSpeedMeasurementPeriodMillis = 1000 * calibrationSeconds;
+    weatherMeterKit.setCalibrationParams(calibrationParams);
     
     Serial.println();
     Serial.println("Now place the anemometer in a constant wind stream, and");
@@ -261,7 +274,7 @@ void runAnemometerCalibrationHelper()
     uint32_t windCounts = weatherMeterKit.getWindSpeedCounts();
     
     // Reset measurement period back to default
-    weatherMeterKit.windSpeedMeasurementPeriodMillis = 1000;
+    calibrationParams.windSpeedMeasurementPeriodMillis = 1000;
     
     Serial.println();
     Serial.println("Calibration period finished! Enter the average wind speed");
@@ -270,12 +283,13 @@ void runAnemometerCalibrationHelper()
     float windSpeed = Serial.parseFloat();
 
     // Calculate kph per count per second
-    weatherMeterKit.kphPerCountPerSec = windSpeed * windCounts / calibrationSeconds;
+    calibrationParams.kphPerCountPerSec = windSpeed * windCounts / calibrationSeconds;
+    weatherMeterKit.setCalibrationParams(calibrationParams);
 
     // Print value for user to see
     Serial.println();
     Serial.print("Setting kph per count per second to ");
-    Serial.println(weatherMeterKit.kphPerCountPerSec, 2);
+    Serial.println(calibrationParams.kphPerCountPerSec, 2);
 
     Serial.println();
     Serial.println("Anemometer calibration complete!");
