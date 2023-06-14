@@ -82,7 +82,7 @@ void SFEWeatherMeterKit::begin()
 
     // Attach interr_upt handlers
     attachInterrupt(digitalPinToInterrupt(_windSpeedPin), windSpeedInterrupt, CHANGE);
-    attachInterrupt(digitalPinToInterrupt(_rainfallPin), rainfallInterrupt, FALLING);
+    attachInterrupt(digitalPinToInterrupt(_rainfallPin), rainfallInterrupt, RISING);
 }
 
 /// @brief Gets the current calibration parameters
