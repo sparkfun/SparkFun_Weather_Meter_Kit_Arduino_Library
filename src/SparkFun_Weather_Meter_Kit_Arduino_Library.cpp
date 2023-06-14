@@ -53,7 +53,7 @@ SFEWeatherMeterKit::SFEWeatherMeterKit(int windDirectionPin, int windSpeedPin, i
     _calibrationParams.windSpeedMeasurementPeriodMillis = 1000;
 
     // Datasheet specifies 0.2794mm of rain per trigger
-    _calibrationParams.mmPerRainfallCount = 1;
+    _calibrationParams.mmPerRainfallCount = 0.2794;
 
     // Debounce time for rainfall detector
     _calibrationParams.minMillisPerRainfall = 100;
