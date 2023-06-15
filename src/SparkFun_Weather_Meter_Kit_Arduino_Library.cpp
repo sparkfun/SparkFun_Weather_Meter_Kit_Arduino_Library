@@ -77,8 +77,8 @@ void SFEWeatherMeterKit::begin()
 {
     // Set pins to inputs
     pinMode(_windDirectionPin, INPUT);
-    pinMode(_windSpeedPin, INPUT);
-    pinMode(_rainfallPin, INPUT);
+    pinMode(_windSpeedPin, INPUT_PULLUP);
+    pinMode(_rainfallPin, INPUT_PULLUP);
 
     // Attach interr_upt handlers
     attachInterrupt(digitalPinToInterrupt(_windSpeedPin), windSpeedInterrupt, CHANGE);
