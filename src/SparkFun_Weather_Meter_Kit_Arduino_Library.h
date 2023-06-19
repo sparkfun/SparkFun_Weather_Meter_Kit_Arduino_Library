@@ -26,6 +26,7 @@ enum SFEWeatherMeterKitAnemometerAngles
 };
 
 #define SFE_WIND_VANE_DEGREES_PER_INDEX (360.0 / WMK_NUM_ANGLES)
+#define SFE_WIND_VANE_ADC_RESOLUTION_DEFAULT 12
 
 // Calibration parameters for each sensor
 struct SFEWeatherMeterKitCalibrationParams
@@ -57,6 +58,9 @@ class SFEWeatherMeterKit
     // Sensor calibration params
     static SFEWeatherMeterKitCalibrationParams getCalibrationParams();
     static void setCalibrationParams(SFEWeatherMeterKitCalibrationParams params);
+
+    // ADC resolution scaling
+    static void setADCResolutionBits(uint8_t resolutionBits);
 
     // Helper functions. These can be helpful for sensor calibration
     static uint32_t getWindSpeedCounts();

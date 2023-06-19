@@ -18,6 +18,10 @@ void setup()
     Serial.println("for operation, and may not be accurate for your project.");
     Serial.println("It is recommended to check out the calibration examples.");
 
+    // The library assumes a 12-bit ADC, but if yours is different, you can set
+    // the resolution here
+    weatherMeterKit.setADCResolutionBits(12);
+
     // Begin weather meter kit
     weatherMeterKit.begin();
 }

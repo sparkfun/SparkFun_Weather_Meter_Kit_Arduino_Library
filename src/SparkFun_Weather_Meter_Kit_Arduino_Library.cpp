@@ -94,6 +94,26 @@ void SFEWeatherMeterKit::setCalibrationParams(SFEWeatherMeterKitCalibrationParam
     memcpy(&_calibrationParams, &params, sizeof(SFEWeatherMeterKitCalibrationParams));
 }
 
+/// @brief Adjusts the expected ADC values for the wind vane based on the
+/// provided ADC resolution
+/// @param resolutionBits Resolution of ADC in bits (eg. 8-bit, 12-bit, etc.)
+void SFEWeatherMeterKit::setADCResolutionBits(uint8_t resolutionBits)
+{
+    for(int i = 0; i < WMK_NUM_ANGLES; i++)
+    {
+        int8_t bitShift = (SFE_WIND_VANE_ADC_RESOLUTION_DEFAULT) - resolutionBits;
+
+        if(bitShift > 0)
+        {
+            _calibrationParams.vaneADCValues[i] >>= bitShift;
+        }
+        else if(bitShift < 0)
+        {
+            _calibrationParams.vaneADCValues[i] <<= -bitShift;
+        }
+    }
+}
+
 /// @brief Measures the direction of the wind vane
 /// @return Wind direction in degrees
 float SFEWeatherMeterKit::getWindDirection()
