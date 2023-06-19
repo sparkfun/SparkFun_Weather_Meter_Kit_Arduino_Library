@@ -21,40 +21,32 @@ void setup()
     Serial.println("this example are all defaults, so you may need to change them.");
 
     // Here we create a struct to hold all the calibration parameters
-    SFEWeatherMeterKitCalibrationParams calibrationParams;
-
-    // The wind vane uses a voltage divider to measure the direction, so the
-    // max value of the ADC needs to be known. It defaults to 255 (8-bit ADC)
-    calibrationParams.windDirMaxADC = 255;
-
-    // In the voltage divider circuit, the wind vane has internal resistors that
-    // connect to ground, meaning your circuit requires a resistor connected to
-    // VCC. The value of that high-side resistor needs to be known. It defaults
-    // to 10k Ohm, which is the same as what's recommended by the datasheet
-    calibrationParams.windDirPullUpVal = 10000;
-
-    // The wind vane has 8 switces, but 2 could close at the same time,
-    // resulting in 16 possible positions. Some of these resistor values are
+    SFEWeatherMeterKitCalibrationParams calibrationParams = weatherMeterKit.getCalibrationParams();
+    
+    // The wind vane has 8 switces, but 2 could close at the same time, which
+    // results in 16 possible positions. Each position has a resistor connected
+    // to GND, so this library assumes a voltage divider is created by adding
+    // another resistor to VCC. Some of the wind vane resistor values are
     // fairly close to each other, meaning an accurate ADC is required. However
     // some ADCs have a non-linear behavior that causes this measurement to be
     // inaccurate. To account for this, the vane resistor values can be manually
     // changed here to compensate for the non-linear behavior of the ADC
-    calibrationParams.vaneResistances[WMK_ANGLE_0_0] = 33000;
-    calibrationParams.vaneResistances[WMK_ANGLE_22_5] = 6570;
-    calibrationParams.vaneResistances[WMK_ANGLE_45_0] = 8200;
-    calibrationParams.vaneResistances[WMK_ANGLE_67_5] = 891;
-    calibrationParams.vaneResistances[WMK_ANGLE_90_0] = 1000;
-    calibrationParams.vaneResistances[WMK_ANGLE_112_5] = 688;
-    calibrationParams.vaneResistances[WMK_ANGLE_135_0] = 2200;
-    calibrationParams.vaneResistances[WMK_ANGLE_157_5] = 1410;
-    calibrationParams.vaneResistances[WMK_ANGLE_180_0] = 3900;
-    calibrationParams.vaneResistances[WMK_ANGLE_202_5] = 3140;
-    calibrationParams.vaneResistances[WMK_ANGLE_225_0] = 16000;
-    calibrationParams.vaneResistances[WMK_ANGLE_247_5] = 14120;
-    calibrationParams.vaneResistances[WMK_ANGLE_270_0] = 120000;
-    calibrationParams.vaneResistances[WMK_ANGLE_292_5] = 42120;
-    calibrationParams.vaneResistances[WMK_ANGLE_315_0] = 64900;
-    calibrationParams.vaneResistances[WMK_ANGLE_337_5] = 21880;
+    calibrationParams.vaneADCValues[WMK_ANGLE_0_0] = 3143;
+    calibrationParams.vaneADCValues[WMK_ANGLE_22_5] = 1624;
+    calibrationParams.vaneADCValues[WMK_ANGLE_45_0] = 1845;
+    calibrationParams.vaneADCValues[WMK_ANGLE_67_5] = 335;
+    calibrationParams.vaneADCValues[WMK_ANGLE_90_0] = 372;
+    calibrationParams.vaneADCValues[WMK_ANGLE_112_5] = 264;
+    calibrationParams.vaneADCValues[WMK_ANGLE_135_0] = 738;
+    calibrationParams.vaneADCValues[WMK_ANGLE_157_5] = 506;
+    calibrationParams.vaneADCValues[WMK_ANGLE_180_0] = 1149;
+    calibrationParams.vaneADCValues[WMK_ANGLE_202_5] = 979;
+    calibrationParams.vaneADCValues[WMK_ANGLE_225_0] = 2520;
+    calibrationParams.vaneADCValues[WMK_ANGLE_247_5] = 2397;
+    calibrationParams.vaneADCValues[WMK_ANGLE_270_0] = 3780;
+    calibrationParams.vaneADCValues[WMK_ANGLE_292_5] = 3309;
+    calibrationParams.vaneADCValues[WMK_ANGLE_315_0] = 3548;
+    calibrationParams.vaneADCValues[WMK_ANGLE_337_5] = 2810;
 
     // The rainfall detector contains a small cup that collects rain water. When
     // the cup fills, the water is dumped and the total rainfall is incremented

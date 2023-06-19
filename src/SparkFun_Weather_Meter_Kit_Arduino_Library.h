@@ -31,17 +31,15 @@ enum SFEWeatherMeterKitAnemometerAngles
 struct SFEWeatherMeterKitCalibrationParams
 {
     // Wind vane
-    uint32_t windDirPullUpVal;
-    uint32_t windDirMaxADC;
-    float vaneResistances[WMK_NUM_ANGLES];
-
-    // Rainfall
-    float mmPerRainfallCount;
-    uint32_t minMillisPerRainfall;
+    uint32_t vaneADCValues[WMK_NUM_ANGLES];
 
     // Wind speed
     uint32_t windSpeedMeasurementPeriodMillis;
     float kphPerCountPerSec;
+
+    // Rainfall
+    float mmPerRainfallCount;
+    uint32_t minMillisPerRainfall;
 };
 
 class SFEWeatherMeterKit
@@ -61,7 +59,6 @@ class SFEWeatherMeterKit
     void setCalibrationParams(SFEWeatherMeterKitCalibrationParams params);
 
     // Helper functions. These can be helpful for sensor calibration
-    float getVaneResistance();
     uint32_t getWindSpeedCounts();
     uint32_t getRainfallCounts();
     void resetWindSpeedFilter();
@@ -83,8 +80,7 @@ class SFEWeatherMeterKit
     // Sensor calibration parameters
     static SFEWeatherMeterKitCalibrationParams _calibrationParams;
 
-    // Reciprocal of values that need division
-    static float _windDirMaxADCRecirpocal;
+    // Reciprocal of values that need division. This speeds up calculations
     static float _windSpeedMeasurementPeriodMillisRecirpocal;
 
     // Variables to track mesaurements

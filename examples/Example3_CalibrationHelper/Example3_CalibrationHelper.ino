@@ -16,6 +16,10 @@ void setup()
     // Begin serial
     Serial.begin(115200);
     Serial.println("SparkFun Weather Meter Kit Example 3 - Calibration Helper");
+    Serial.println();
+    Serial.println("This example will help you determine the best calibration");
+    Serial.println("parameters to use for your project. Once each section is done,");
+    Serial.println("the values will be printed for you to copy into your sketch.");
 
     // We'll be changing the calibration parameters one at a time, so we'll get
     // all the default values now
@@ -61,37 +65,17 @@ void runVaneCalibrationHelper()
     Serial.println();
     Serial.println("Wind vane calibration!");
 
-    // Pull up resistor value
     Serial.println();
-    Serial.println("The wind vane has several switches, each with different resistors");
-    Serial.println("connected to GND. This library assumes there's an external");
-    Serial.println("pull up resistor of known value creating a voltage divider,");
-    Serial.println("which allows the internal resistor value to be measured. Enter");
-    Serial.println("the pull up resistor value in Ohms (enter 10000 if not sure)");
-    waitForUserInput();
-    calibrationParams.windDirPullUpVal = Serial.parseInt();
-
-    // Max ADC value
-    Serial.println();
-    Serial.println("The output of the voltage divider is measured with the ADC,");
-    Serial.println("so the resolution needs to be known. Enter the max value of");
-    Serial.println("your microcontroller's ADC (eg. for an 8-bit ADC, enter 255)");
-    waitForUserInput();
-    calibrationParams.windDirMaxADC = Serial.parseInt();
-
-    // Set the pull up resistor and max ADC values
-    weatherMeterKit.setCalibrationParams(calibrationParams);
-
-    Serial.println();
-    Serial.println("Some of the wind vane resistor values are quite close to each");
-    Serial.println("other. If your ADC behaves non-linearly, this can result in");
-    Serial.println("incorrect resistance measurements. This can be compensated by");
-    Serial.println("setting the expected resistance for each angle, which this part");
-    Serial.println("will walk you through. Hold the wind vane at the specified");
-    Serial.println("angle, then enter any key once steady. Pay close attention to");
-    Serial.println("the measured resistance to see when it changes, especially");
-    Serial.println("around the 22.5 degree increments (they're very narrow)!");
-    Serial.println("Enter any key to begin.");
+    Serial.println("The wind vane has several switches, each with different");
+    Serial.println("resistors connected to GND. This library assumes there's an");
+    Serial.println("external resistor connected to VCC creating a voltage divider;");
+    Serial.println("the voltage is measured and compared with expected voltages");
+    Serial.println("for each direction. The expected voltages may need to be tuned,");
+    Serial.println("which this part walks you through. Hold the wind vane at the");
+    Serial.println("specified angle, then enter any key once steady. Pay close");
+    Serial.println("attention to the measured ADC value to see when it changes,");
+    Serial.println("especially around the 22.5 degree increments, they're very");
+    Serial.println("narrow! Enter any key to begin.");
 
     // Wait for user to begin
     waitForUserInput();
@@ -100,7 +84,7 @@ void runVaneCalibrationHelper()
     for (int i = 0; i < WMK_NUM_ANGLES; i++)
     {
         // Compute current angle
-        float currentAngle = i * (360.0 / WMK_NUM_ANGLES);
+        float currentAngle = i * SFE_WIND_VANE_DEGREES_PER_INDEX;
 
         // Loop until user requests to continue
         clearUserInput();
@@ -109,8 +93,8 @@ void runVaneCalibrationHelper()
             Serial.print("Hold wind vane at ");
             Serial.print(currentAngle, 1);
             Serial.print(" degrees. Enter any key when in position.");
-            Serial.print("    Measured resistance (Ohms): ");
-            Serial.print(weatherMeterKit.getVaneResistance(), 1);
+            Serial.print("    Measured ADC: ");
+            Serial.print(analogRead(windDirectionPin));
             Serial.print("    Measured direction (degrees): ");
             Serial.println(weatherMeterKit.getWindDirection(), 1);
 
@@ -118,39 +102,37 @@ void runVaneCalibrationHelper()
             delay(100);
         }
 
-        // Set this as the new expected resistance for this angle
-        float measuredResistance = weatherMeterKit.getVaneResistance();
-        calibrationParams.vaneResistances[i] = measuredResistance;
+        // Set this as the new expected ADC value for this angle
+        uint32_t measuredADC = analogRead(windDirectionPin);
+        calibrationParams.vaneADCValues[i] = measuredADC;
         weatherMeterKit.setCalibrationParams(calibrationParams);
 
         // Print value for user to see
         Serial.println();
-        Serial.print("Setting expected resistance for ");
+        Serial.print("Setting expected ADC value for ");
         Serial.print(currentAngle);
         Serial.print(" degrees to ");
-        Serial.print(measuredResistance, 0);
-        Serial.println(" Ohms");
+        Serial.println(measuredADC);
         Serial.println();
 
         // Wait a bit so user can read it
         delay(1000);
     }
 
-    // Print the resistance saved for each angle again so the user has it all in
+    // Print the ADC value saved for each angle again so the user has it all in
     // one place
     Serial.println();
-    Serial.println("Here are the resistances set for each angle:");
+    Serial.println("Here are the ADC values set for each angle:");
     Serial.println();
     for (int i = 0; i < WMK_NUM_ANGLES; i++)
     {
         // Compute current angle
-        float currentAngle = i * (360.0 / WMK_NUM_ANGLES);
+        float currentAngle = i * SFE_WIND_VANE_DEGREES_PER_INDEX;
 
-        // Print this angle / resistance pair
+        // Print this angle / ADC pair
         Serial.print(currentAngle, 1);
         Serial.print(" degrees: ");
-        Serial.print(calibrationParams.vaneResistances[i]);
-        Serial.println(" Ohms");
+        Serial.println(calibrationParams.vaneADCValues[i]);
     }
 
     Serial.println();

@@ -2,7 +2,6 @@
 
 // Static member definitions
 SFEWeatherMeterKitCalibrationParams SFEWeatherMeterKit::_calibrationParams;
-float SFEWeatherMeterKit::_windDirMaxADCRecirpocal;
 float SFEWeatherMeterKit::_windSpeedMeasurementPeriodMillisRecirpocal;
 float SFEWeatherMeterKit::_windSpeed;
 uint32_t SFEWeatherMeterKit::_rainfallCounts;
@@ -18,32 +17,26 @@ SFEWeatherMeterKit::SFEWeatherMeterKit(int windDirectionPin, int windSpeedPin, i
     _windSpeedPin = windSpeedPin;
     _rainfallPin = rainfallPin;
 
-    // Datasheet recommends a 10k pull up resistor, so that's what's assumed
-    _calibrationParams.windDirPullUpVal = 10000;
-
-    // Assuming an 8-bit ADC
-    _calibrationParams.windDirMaxADC = 255;
-    _windDirMaxADCRecirpocal = 1.0 / _calibrationParams.windDirMaxADC;
-
-    // The wind vane has 8 switces, but 2 could close at the same time,
-    // resulting in 16 possible positions. The datasheet specifies all possible
-    // resistance values and corresponding directions
-    _calibrationParams.vaneResistances[WMK_ANGLE_0_0] = 33000;
-    _calibrationParams.vaneResistances[WMK_ANGLE_22_5] = 6570;
-    _calibrationParams.vaneResistances[WMK_ANGLE_45_0] = 8200;
-    _calibrationParams.vaneResistances[WMK_ANGLE_67_5] = 891;
-    _calibrationParams.vaneResistances[WMK_ANGLE_90_0] = 1000;
-    _calibrationParams.vaneResistances[WMK_ANGLE_112_5] = 688;
-    _calibrationParams.vaneResistances[WMK_ANGLE_135_0] = 2200;
-    _calibrationParams.vaneResistances[WMK_ANGLE_157_5] = 1410;
-    _calibrationParams.vaneResistances[WMK_ANGLE_180_0] = 3900;
-    _calibrationParams.vaneResistances[WMK_ANGLE_202_5] = 3140;
-    _calibrationParams.vaneResistances[WMK_ANGLE_225_0] = 16000;
-    _calibrationParams.vaneResistances[WMK_ANGLE_247_5] = 14120;
-    _calibrationParams.vaneResistances[WMK_ANGLE_270_0] = 120000;
-    _calibrationParams.vaneResistances[WMK_ANGLE_292_5] = 42120;
-    _calibrationParams.vaneResistances[WMK_ANGLE_315_0] = 64900;
-    _calibrationParams.vaneResistances[WMK_ANGLE_337_5] = 21880;
+    // The wind vane has 8 switces, but 2 could close at the same time, which
+    // results in 16 possible positions. The datasheet specifies the resistance
+    // for each direction, which were used to calculate the expected ADC values
+    // for a 12-bit ADC (4095 max) with a 10k pullup
+    _calibrationParams.vaneADCValues[WMK_ANGLE_0_0] = 3143;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_22_5] = 1624;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_45_0] = 1845;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_67_5] = 335;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_90_0] = 372;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_112_5] = 264;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_135_0] = 738;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_157_5] = 506;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_180_0] = 1149;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_202_5] = 979;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_225_0] = 2520;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_247_5] = 2397;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_270_0] = 3780;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_292_5] = 3309;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_315_0] = 3548;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_337_5] = 2810;
 
     // Datasheet specifies 2.4kph of wind causes one trigger per second
     _calibrationParams.kphPerCountPerSec = 2.4;
@@ -100,75 +93,31 @@ void SFEWeatherMeterKit::setCalibrationParams(SFEWeatherMeterKitCalibrationParam
     memcpy(&_calibrationParams, &params, sizeof(SFEWeatherMeterKitCalibrationParams));
 
     // Compute the needed reciprocal values
-    _windDirMaxADCRecirpocal = 1.0 / params.windDirMaxADC;
     _windSpeedMeasurementPeriodMillisRecirpocal = 1.0 / params.windSpeedMeasurementPeriodMillis;
-}
-
-/// @brief Measures the resisance of the wind vane (assumes a voltage divider)
-/// @return Measured resistance in Ohms
-float SFEWeatherMeterKit::getVaneResistance()
-{
-    // The wind vane has 8 switches inside, each connected to a different
-    // resistor going to ground. This library assumes there's an external pullup
-    // resistor of a known value, creating a voltage divider like this circuit:
-    //
-    //              V_out
-    //                |
-    // V_in ----WMW---+----WMW--- GND
-    //          R_up      R_vane
-    //
-    // By measuring V_out, we can calculate what R_vane is by using the voltage
-    // divider equation:
-    //
-    // V_out = V_in * R_vane / (R_up + R_vane)
-    //
-    // Solving for R_vane, we get:
-    //
-    // R_vane = (V_out / V_in) * R_up / (1 - (V_out / V_in))
-
-    // Measure V_out
-    int rawADC = analogRead(_windDirectionPin);
-
-    // Calculate the voltage ratio (V_out / V_in)
-    float voltageRatio = rawADC * _windDirMaxADCRecirpocal;
-
-    // Now calculate R_vane based on the equation above. Just need to make sure
-    // we don't divide by zero!
-    if ((1 - voltageRatio) != 0)
-    {
-        // Won't divide by zero, yay! Compute resistance from equation above
-        return voltageRatio * _calibrationParams.windDirPullUpVal / (1 - voltageRatio);
-    }
-    else
-    {
-        // Uh oh, this would cause us to divide by zero! We'll just give a very
-        // large number to be safe, 1M Ohm in this case
-        return 1000000;
-    }
 }
 
 /// @brief Measures the direction of the wind vane
 /// @return Wind direction in degrees
 float SFEWeatherMeterKit::getWindDirection()
 {
-    // The wind vane has different resistance values based on the direction it's
-    // pointing, so first measure that resistance
-    float vaneResistance = getVaneResistance();
+    // Measure the output of the voltage divider
+    int rawADC = analogRead(_windDirectionPin);
 
-    // Now we'll search through all the possible resistance values to find which
-    // is closest to our measurement, using a simple linear search
-    float closestResistance = 1000000;
+    // Now we'll loop through all possible directions to find which is closest
+    // to our measurement, using a simple linear search
+    int closestDifference = 1000000;
     int closestIndex = 0;
     for (int i = 0; i < WMK_NUM_ANGLES; i++)
     {
-        // Compute the difference between this resistance and what we measured
-        float resistanceDifference = abs(vaneResistance - _calibrationParams.vaneResistances[i]);
+        // Compute the difference between the ADC value for this direction and
+        // what we measured
+        int adcDifference = abs((int)_calibrationParams.vaneADCValues[i] - rawADC);
 
         // Check if this different is less than our closest so far
-        if (resistanceDifference < closestResistance)
+        if (adcDifference < closestDifference)
         {
             // This resistance is closer, update closest resistance and index
-            closestResistance = resistanceDifference;
+            closestDifference = adcDifference;
             closestIndex = i;
         }
     }
