@@ -47,22 +47,22 @@ class SFEWeatherMeterKit
   public:
     // Constructor
     SFEWeatherMeterKit(int windDirectionPin, int windSpeedPin, int rainfallPin);
-    void begin();
+    static void begin();
 
     // Data collection
-    float getWindDirection();
-    float getWindSpeed();
-    float getTotalRainfall();
+    static float getWindDirection();
+    static float getWindSpeed();
+    static float getTotalRainfall();
 
     // Sensor calibration params
-    SFEWeatherMeterKitCalibrationParams getCalibrationParams();
-    void setCalibrationParams(SFEWeatherMeterKitCalibrationParams params);
+    static SFEWeatherMeterKitCalibrationParams getCalibrationParams();
+    static void setCalibrationParams(SFEWeatherMeterKitCalibrationParams params);
 
     // Helper functions. These can be helpful for sensor calibration
-    uint32_t getWindSpeedCounts();
-    uint32_t getRainfallCounts();
-    void resetWindSpeedFilter();
-    void resetTotalRainfall();
+    static uint32_t getWindSpeedCounts();
+    static uint32_t getRainfallCounts();
+    static void resetWindSpeedFilter();
+    static void resetTotalRainfall();
 
   private:
     // Updates wind speed
@@ -73,9 +73,9 @@ class SFEWeatherMeterKit
     static void rainfallInterrupt();
 
     // Pins for each sensor
-    int _windDirectionPin;
-    int _windSpeedPin;
-    int _rainfallPin;
+    static int _windDirectionPin;
+    static int _windSpeedPin;
+    static int _rainfallPin;
 
     // Sensor calibration parameters
     static SFEWeatherMeterKitCalibrationParams _calibrationParams;

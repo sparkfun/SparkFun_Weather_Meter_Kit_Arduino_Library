@@ -8,6 +8,9 @@ uint32_t SFEWeatherMeterKit::_rainfallCounts;
 uint32_t SFEWeatherMeterKit::_windCounts;
 uint32_t SFEWeatherMeterKit::_lastWindSpeedMillis;
 uint32_t SFEWeatherMeterKit::_lastRainfallMillis;
+int SFEWeatherMeterKit::_windDirectionPin;
+int SFEWeatherMeterKit::_windSpeedPin;
+int SFEWeatherMeterKit::_rainfallPin;
 
 /// @brief Default constructor, sets default calibration values
 SFEWeatherMeterKit::SFEWeatherMeterKit(int windDirectionPin, int windSpeedPin, int rainfallPin)
