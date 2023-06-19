@@ -80,13 +80,10 @@ class SFEWeatherMeterKit
     // Sensor calibration parameters
     static SFEWeatherMeterKitCalibrationParams _calibrationParams;
 
-    // Reciprocal of values that need division. This speeds up calculations
-    static float _windSpeedMeasurementPeriodMillisRecirpocal;
-
     // Variables to track mesaurements
-    static float _windSpeed;
-    static uint32_t _rainfallCounts;
     static uint32_t _windCounts;
+    static uint32_t _windCountsPrevious;
+    static uint32_t _rainfallCounts;
     static uint32_t _lastWindSpeedMillis;
     static uint32_t _lastRainfallMillis;
 };

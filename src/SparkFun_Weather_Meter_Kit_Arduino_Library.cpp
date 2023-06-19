@@ -2,10 +2,9 @@
 
 // Static member definitions
 SFEWeatherMeterKitCalibrationParams SFEWeatherMeterKit::_calibrationParams;
-float SFEWeatherMeterKit::_windSpeedMeasurementPeriodMillisRecirpocal;
-float SFEWeatherMeterKit::_windSpeed;
-uint32_t SFEWeatherMeterKit::_rainfallCounts;
+uint32_t SFEWeatherMeterKit::_windCountsPrevious;
 uint32_t SFEWeatherMeterKit::_windCounts;
+uint32_t SFEWeatherMeterKit::_rainfallCounts;
 uint32_t SFEWeatherMeterKit::_lastWindSpeedMillis;
 uint32_t SFEWeatherMeterKit::_lastRainfallMillis;
 int SFEWeatherMeterKit::_windDirectionPin;
@@ -53,12 +52,11 @@ SFEWeatherMeterKit::SFEWeatherMeterKit(int windDirectionPin, int windSpeedPin, i
 
     // Debounce time for rainfall detector
     _calibrationParams.minMillisPerRainfall = 100;
-    _windSpeedMeasurementPeriodMillisRecirpocal = 1.0 / _calibrationParams.windSpeedMeasurementPeriodMillis;
 
     // Reset counters to zero
-    _rainfallCounts = 0;
+    _windCountsPrevious = 0;
     _windCounts = 0;
-    _windSpeed = 0;
+    _rainfallCounts = 0;
 
     // Reset timers
     _lastWindSpeedMillis = millis();
@@ -94,9 +92,6 @@ void SFEWeatherMeterKit::setCalibrationParams(SFEWeatherMeterKitCalibrationParam
 {
     // Copy the provided calibration parameters
     memcpy(&_calibrationParams, &params, sizeof(SFEWeatherMeterKitCalibrationParams));
-
-    // Compute the needed reciprocal values
-    _windSpeedMeasurementPeriodMillisRecirpocal = 1.0 / params.windSpeedMeasurementPeriodMillis;
 }
 
 /// @brief Measures the direction of the wind vane
@@ -187,21 +182,16 @@ void SFEWeatherMeterKit::updateWindSpeed()
             // meaning the wind speed is very slow or even zero. So we'll reset
             // the wind speed and counter, and set the start of the next window
             // to be now
-            _windSpeed = 0;
+            _windCountsPrevious = 0;
             _windCounts = 0;
-            _lastWindSpeedMillis = millis();
+            _lastWindSpeedMillis = tNow;
         }
         else
         {
             // We've only just gone past the end of the measurement period, so
-            // calculate the wind speed for the previous window. First compute
-            // the counts per millisecond
-            _windSpeed = (float)_windCounts * _windSpeedMeasurementPeriodMillisRecirpocal;
-
-            // Convert milliseconds to seconds, and counts per second to kph
-            _windSpeed *= 1000 * _calibrationParams.kphPerCountPerSec;
-
-            // Reset counter, and update time of start of next mesaurement window
+            // save the wind counts for the previous window, reset current
+            // counter, and update time of start of next mesaurement window
+            _windCountsPrevious = _windCounts;
             _windCounts = 0;
             _lastWindSpeedMillis += _calibrationParams.windSpeedMeasurementPeriodMillis;
         }
@@ -215,8 +205,15 @@ float SFEWeatherMeterKit::getWindSpeed()
     // Check if the wind speed needs to be updated
     updateWindSpeed();
 
+    // Calculate the wind speed for the previous window. First compute the
+    // counts per millisecond
+    float windSpeed = (float) _windCountsPrevious / _calibrationParams.windSpeedMeasurementPeriodMillis;
+
+    // Convert milliseconds to seconds, and counts per second to kph
+    windSpeed *= 1000 * _calibrationParams.kphPerCountPerSec;
+
     // Return wind speed for the previous measurement interval
-    return _windSpeed;
+    return windSpeed;
 }
 
 /// @brief Gets the number of wind speed counts
@@ -246,7 +243,7 @@ float SFEWeatherMeterKit::getTotalRainfall()
 /// @brief Resets the total rainfall
 void SFEWeatherMeterKit::resetWindSpeedFilter()
 {
-    _windSpeed = 0;
+    _windCountsPrevious = 0;
     _windCounts = 0;
     _lastWindSpeedMillis = millis();
 }
