@@ -7,12 +7,12 @@ uint32_t SFEWeatherMeterKit::_windCounts;
 uint32_t SFEWeatherMeterKit::_rainfallCounts;
 uint32_t SFEWeatherMeterKit::_lastWindSpeedMillis;
 uint32_t SFEWeatherMeterKit::_lastRainfallMillis;
-int SFEWeatherMeterKit::_windDirectionPin;
-int SFEWeatherMeterKit::_windSpeedPin;
-int SFEWeatherMeterKit::_rainfallPin;
+uint8_t SFEWeatherMeterKit::_windDirectionPin;
+uint8_t SFEWeatherMeterKit::_windSpeedPin;
+uint8_t SFEWeatherMeterKit::_rainfallPin;
 
 /// @brief Default constructor, sets default calibration values
-SFEWeatherMeterKit::SFEWeatherMeterKit(int windDirectionPin, int windSpeedPin, int rainfallPin)
+SFEWeatherMeterKit::SFEWeatherMeterKit(uint8_t windDirectionPin, uint8_t windSpeedPin, uint8_t rainfallPin)
 {
     // Set sensors pins
     _windDirectionPin = windDirectionPin;
@@ -117,7 +117,7 @@ void SFEWeatherMeterKit::setCalibrationParams(SFEWeatherMeterKitCalibrationParam
 /// @param resolutionBits Resolution of ADC in bits (eg. 8-bit, 12-bit, etc.)
 void SFEWeatherMeterKit::setADCResolutionBits(uint8_t resolutionBits)
 {
-    for(int i = 0; i < WMK_NUM_ANGLES; i++)
+    for(uint8_t i = 0; i < WMK_NUM_ANGLES; i++)
     {
         int8_t bitShift = (SFE_WIND_VANE_ADC_RESOLUTION_DEFAULT) - resolutionBits;
 
@@ -137,17 +137,21 @@ void SFEWeatherMeterKit::setADCResolutionBits(uint8_t resolutionBits)
 float SFEWeatherMeterKit::getWindDirection()
 {
     // Measure the output of the voltage divider
-    int rawADC = analogRead(_windDirectionPin);
+    uint16_t rawADC = analogRead(_windDirectionPin);
 
     // Now we'll loop through all possible directions to find which is closest
-    // to our measurement, using a simple linear search
-    int closestDifference = 1000000;
-    int closestIndex = 0;
-    for (int i = 0; i < WMK_NUM_ANGLES; i++)
+    // to our measurement, using a simple linear search. closestDifference is
+    // initialized to max 16-bit signed value (2^15 - 1 = 32,767)
+    int16_t closestDifference = 32767;
+    uint8_t closestIndex = 0;
+    for (uint8_t i = 0; i < WMK_NUM_ANGLES; i++)
     {
         // Compute the difference between the ADC value for this direction and
         // what we measured
-        int adcDifference = abs((int)_calibrationParams.vaneADCValues[i] - rawADC);
+        int16_t adcDifference = _calibrationParams.vaneADCValues[i] - rawADC;
+
+        // We only care about the magnitude of the difference
+        adcDifference = abs(adcDifference);
 
         // Check if this different is less than our closest so far
         if (adcDifference < closestDifference)

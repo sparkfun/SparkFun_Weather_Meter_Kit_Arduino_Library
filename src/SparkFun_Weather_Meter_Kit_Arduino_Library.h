@@ -32,7 +32,7 @@ enum SFEWeatherMeterKitAnemometerAngles
 struct SFEWeatherMeterKitCalibrationParams
 {
     // Wind vane
-    uint32_t vaneADCValues[WMK_NUM_ANGLES];
+    uint16_t vaneADCValues[WMK_NUM_ANGLES];
 
     // Wind speed
     uint32_t windSpeedMeasurementPeriodMillis;
@@ -47,7 +47,7 @@ class SFEWeatherMeterKit
 {
   public:
     // Constructor
-    SFEWeatherMeterKit(int windDirectionPin, int windSpeedPin, int rainfallPin);
+    SFEWeatherMeterKit(uint8_t windDirectionPin, uint8_t windSpeedPin, uint8_t rainfallPin);
     static void begin();
 
     // Data collection
@@ -77,9 +77,9 @@ class SFEWeatherMeterKit
     static void rainfallInterrupt();
 
     // Pins for each sensor
-    static int _windDirectionPin;
-    static int _windSpeedPin;
-    static int _rainfallPin;
+    static uint8_t _windDirectionPin;
+    static uint8_t _windSpeedPin;
+    static uint8_t _rainfallPin;
 
     // Sensor calibration parameters
     static SFEWeatherMeterKitCalibrationParams _calibrationParams;
