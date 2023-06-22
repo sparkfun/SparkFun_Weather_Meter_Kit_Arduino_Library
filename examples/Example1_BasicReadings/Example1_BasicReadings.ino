@@ -5,6 +5,11 @@ int windDirectionPin = 35;
 int windSpeedPin = 14;
 int rainfallPin = 27;
 
+// Pins for the Weather Shield
+// int windDirectionPin = A0;
+// int windSpeedPin = 3;
+// int rainfallPin = 2;
+
 // Create an instance of the weather meter kit
 SFEWeatherMeterKit weatherMeterKit(windDirectionPin, windSpeedPin, rainfallPin);
 
