@@ -5,6 +5,11 @@ int windDirectionPin = 35;
 int windSpeedPin = 14;
 int rainfallPin = 27;
 
+// Pins for the Weather Shield
+// int windDirectionPin = A0;
+// int windSpeedPin = 3;
+// int rainfallPin = 2;
+
 // Create an instance of the weather meter kit
 SFEWeatherMeterKit weatherMeterKit(windDirectionPin, windSpeedPin, rainfallPin);
 
@@ -23,7 +28,7 @@ void setup()
     // Here we create a struct to hold all the calibration parameters
     SFEWeatherMeterKitCalibrationParams calibrationParams = weatherMeterKit.getCalibrationParams();
     
-    // The wind vane has 8 switces, but 2 could close at the same time, which
+    // The wind vane has 8 switches, but 2 could close at the same time, which
     // results in 16 possible positions. Each position has a resistor connected
     // to GND, so this library assumes a voltage divider is created by adding
     // another resistor to VCC. Some of the wind vane resistor values are

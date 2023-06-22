@@ -5,6 +5,11 @@ int windDirectionPin = 35;
 int windSpeedPin = 14;
 int rainfallPin = 27;
 
+// Pins for the Weather Shield
+// int windDirectionPin = A0;
+// int windSpeedPin = 3;
+// int rainfallPin = 2;
+
 // Create an instance of the weather meter kit
 SFEWeatherMeterKit weatherMeterKit(windDirectionPin, windSpeedPin, rainfallPin);
 
@@ -282,7 +287,7 @@ void clearUserInput()
     // Ensure all previous characters have come through
     delay(100);
 
-    // Throw away all previous charaters
+    // Throw away all previous characters
     while (Serial.available() != 0)
     {
         Serial.read();
