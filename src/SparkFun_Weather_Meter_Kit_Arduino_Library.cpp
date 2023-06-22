@@ -40,6 +40,24 @@ SFEWeatherMeterKit::SFEWeatherMeterKit(int windDirectionPin, int windSpeedPin, i
     _calibrationParams.vaneADCValues[WMK_ANGLE_315_0] = 3548;
     _calibrationParams.vaneADCValues[WMK_ANGLE_337_5] = 2810;
 
+    // Weather Shield Values (12-bit ADC)
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_0_0] = 3610;
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_22_5] = 2645;
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_45_0] = 2803;
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_67_5] = 1560;
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_90_0] = 1595;
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_112_5] = 1490;
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_135_0] = 1932;
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_157_5] = 1722;
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_180_0] = 2279;
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_202_5] = 2139;
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_225_0] = 3247;
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_247_5] = 3171;
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_270_0] = 3943;
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_292_5] = 3701;
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_315_0] = 3826;
+    // _calibrationParams.vaneADCValues[WMK_ANGLE_337_5] = 3422;
+
     // Datasheet specifies 2.4kph of wind causes one trigger per second
     _calibrationParams.kphPerCountPerSec = 2.4;
 
