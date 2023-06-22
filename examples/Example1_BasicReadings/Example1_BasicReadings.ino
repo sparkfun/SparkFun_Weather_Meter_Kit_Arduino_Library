@@ -1,11 +1,13 @@
 #include "SparkFun_Weather_Meter_Kit_Arduino_Library.h"
 
-// Pins for each sensor of the weather meter kit
+// Below are the pin definitions for each sensor of the weather meter kit
+
+// Pins for Weather Carrier with ESP32 Processor Board
 int windDirectionPin = 35;
 int windSpeedPin = 14;
 int rainfallPin = 27;
 
-// Pins for the Weather Shield
+// Pins for the Weather Shield with SparkFun RedBoard Qwiic or Arduino Uno
 // int windDirectionPin = A0;
 // int windSpeedPin = 3;
 // int rainfallPin = 2;

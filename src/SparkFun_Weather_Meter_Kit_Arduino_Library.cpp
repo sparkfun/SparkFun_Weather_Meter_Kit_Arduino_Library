@@ -40,7 +40,8 @@ SFEWeatherMeterKit::SFEWeatherMeterKit(uint8_t windDirectionPin, uint8_t windSpe
     _calibrationParams.vaneADCValues[WMK_ANGLE_315_0] = 3548;
     _calibrationParams.vaneADCValues[WMK_ANGLE_337_5] = 2810;
 
-    // Weather Shield Values (12-bit ADC)
+    // The SparkFun Weather Shield Values uses a slightly different circuit, the
+    // expected 12-bit values for it are specified here
     // _calibrationParams.vaneADCValues[WMK_ANGLE_0_0] = 3610;
     // _calibrationParams.vaneADCValues[WMK_ANGLE_22_5] = 2645;
     // _calibrationParams.vaneADCValues[WMK_ANGLE_45_0] = 2803;
