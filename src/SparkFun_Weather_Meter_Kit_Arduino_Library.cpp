@@ -229,8 +229,9 @@ float SFEWeatherMeterKit::getWindSpeed()
     // counts per millisecond
     float windSpeed = (float) _windCountsPrevious / _calibrationParams.windSpeedMeasurementPeriodMillis;
 
-    // Convert milliseconds to seconds, and counts per second to kph
-    windSpeed *= 1000 * _calibrationParams.kphPerCountPerSec;
+    // Convert milliseconds to seconds, and counts per second to kph. Need to
+    // divide by 2 to account for using both rising and falling edges
+    windSpeed *= 1000 * _calibrationParams.kphPerCountPerSec / 2;
 
     // Return wind speed for the previous measurement interval
     return windSpeed;

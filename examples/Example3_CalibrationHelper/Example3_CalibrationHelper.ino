@@ -190,8 +190,8 @@ void runRainfallCalibrationHelper()
     int totalWaterMM3 = totalWaterML * 1000;
 
     // Divide by collection area of rainfall detector. It's about 50mm x 110mm,
-    // resulting in a collection area of about 550mm^2
-    float totalRainfallMM = totalWaterMM3 / 550.0;
+    // resulting in a collection area of about 5500mm^2
+    float totalRainfallMM = totalWaterMM3 / 5500.0;
 
     // Divide by number of counts
     float mmPerCount = totalRainfallMM / weatherMeterKit.getRainfallCounts();
