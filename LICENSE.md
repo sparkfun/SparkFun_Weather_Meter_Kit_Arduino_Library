@@ -29,7 +29,6 @@ No warranties are given. The license may not give you all of the permissions nec
 
 Code
 --------
-Library contains code from multiple sources, see top of each file for specific licensing information.
 
 **SparkFun code, firmware, and software is released under the MIT License(http://opensource.org/licenses/MIT).**
 
@@ -54,7 +53,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-**Analog Devices, firmware and software is subject to software license agreement. See SLA pdf included with this repo.**
-License terms outlines in:
-2021-05-20-LWSCADIN1110 Click Thru SLA .pdf
