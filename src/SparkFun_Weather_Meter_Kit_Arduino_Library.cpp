@@ -19,7 +19,7 @@ SFEWeatherMeterKit::SFEWeatherMeterKit(int windDirectionPin, int windSpeedPin, i
     _windSpeedPin = windSpeedPin;
     _rainfallPin = rainfallPin;
 
-    // The wind vane has 8 switces, but 2 could close at the same time, which
+    // The wind vane has 8 switches, but 2 could close at the same time, which
     // results in 16 possible positions. The datasheet specifies the resistance
     // for each direction, which were used to calculate the expected ADC values
     // for a 12-bit ADC (4095 max) with a 10k pullup
@@ -92,7 +92,7 @@ void SFEWeatherMeterKit::begin()
     pinMode(_windSpeedPin, INPUT_PULLUP);
     pinMode(_rainfallPin, INPUT_PULLUP);
 
-    // Attach interr_upt handlers
+    // Attach interrupt handlers
     attachInterrupt(digitalPinToInterrupt(_windSpeedPin), windSpeedInterrupt, CHANGE);
     attachInterrupt(digitalPinToInterrupt(_rainfallPin), rainfallInterrupt, RISING);
 }
@@ -193,7 +193,7 @@ void SFEWeatherMeterKit::updateWindSpeed()
     // When t_now exceeds the measurement period, the total number of pulses is
     // used to calculate the average wind speed for that window. This filter
     // only outputs wind speed for the previous window, which does result in
-    // delayed measuremnts, but is fine for most data logging applications since
+    // delayed measurements, but is fine for most data logging applications since
     // logs can be synced with the measurement widows
 
     // Get current time
@@ -228,7 +228,7 @@ void SFEWeatherMeterKit::updateWindSpeed()
         {
             // We've only just gone past the end of the measurement period, so
             // save the wind counts for the previous window, reset current
-            // counter, and update time of start of next mesaurement window
+            // counter, and update time of start of next measurement window
             _windCountsPrevious = _windCounts;
             _windCounts = 0;
             _lastWindSpeedMillis += _calibrationParams.windSpeedMeasurementPeriodMillis;
@@ -236,7 +236,7 @@ void SFEWeatherMeterKit::updateWindSpeed()
     }
 }
 
-/// @brief Gets the mesaured wind speed
+/// @brief Gets the measured wind speed
 /// @return Measured wind speed in kph
 float SFEWeatherMeterKit::getWindSpeed()
 {

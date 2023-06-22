@@ -84,7 +84,7 @@ class SFEWeatherMeterKit
     // Sensor calibration parameters
     static SFEWeatherMeterKitCalibrationParams _calibrationParams;
 
-    // Variables to track mesaurements
+    // Variables to track measurements
     static uint32_t _windCounts;
     static uint32_t _windCountsPrevious;
     static uint32_t _rainfallCounts;

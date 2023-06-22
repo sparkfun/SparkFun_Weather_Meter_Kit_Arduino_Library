@@ -282,7 +282,7 @@ void clearUserInput()
     // Ensure all previous characters have come through
     delay(100);
 
-    // Throw away all previous charaters
+    // Throw away all previous characters
     while (Serial.available() != 0)
     {
         Serial.read();
