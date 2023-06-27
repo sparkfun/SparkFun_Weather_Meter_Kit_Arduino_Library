@@ -1,0 +1,53 @@
+#########################################################
+# Syntax Coloring Map for SparkFun Weather Meter Kit    #
+#########################################################
+# Class
+#########################################################
+
+SFEWeatherMeterKit	KEYWORD1
+
+#########################################################
+# Methods and Functions
+#########################################################
+
+begin KEYWORD2
+getWindDirection KEYWORD2
+getWindSpeed KEYWORD2
+getTotalRainfall KEYWORD2
+getCalibrationParams KEYWORD2
+setCalibrationParams KEYWORD2
+setADCResolutionBits KEYWORD2
+getWindSpeedCounts KEYWORD2
+getRainfallCounts KEYWORD2
+resetWindSpeedFilter KEYWORD2
+resetTotalRainfall KEYWORD2
+
+#########################################################
+# Constants
+#########################################################
+
+WMK_ANGLE_0_0 LITERAL1
+WMK_ANGLE_22_5 LITERAL1
+WMK_ANGLE_45_0 LITERAL1
+WMK_ANGLE_67_5 LITERAL1
+WMK_ANGLE_90_0 LITERAL1
+WMK_ANGLE_112_5 LITERAL1
+WMK_ANGLE_135_0 LITERAL1
+WMK_ANGLE_157_5 LITERAL1
+WMK_ANGLE_180_0 LITERAL1
+WMK_ANGLE_202_5 LITERAL1
+WMK_ANGLE_225_0 LITERAL1
+WMK_ANGLE_247_5 LITERAL1
+WMK_ANGLE_270_0 LITERAL1
+WMK_ANGLE_292_5 LITERAL1
+WMK_ANGLE_315_0 LITERAL1
+WMK_ANGLE_337_5 LITERAL1
+WMK_NUM_ANGLES LITERAL1
+SFE_WIND_VANE_DEGREES_PER_INDEX LITERAL1
+SFE_WIND_VANE_ADC_RESOLUTION_DEFAULT LITERAL1
+
+#########################################################
+# Structs
+#########################################################
+
+SFEWeatherMeterKitCalibrationParams LITERAL3
