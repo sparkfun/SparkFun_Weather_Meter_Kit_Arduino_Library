@@ -20,44 +20,25 @@ SFEWeatherMeterKit::SFEWeatherMeterKit(uint8_t windDirectionPin, uint8_t windSpe
     _rainfallPin = rainfallPin;
 
     // The wind vane has 8 switches, but 2 could close at the same time, which
-    // results in 16 possible positions. The datasheet specifies the resistance
-    // for each direction, which were used to calculate the expected ADC values
-    // for a 12-bit ADC (4095 max) with a 10k pullup
-    _calibrationParams.vaneADCValues[WMK_ANGLE_0_0] = 3143;
-    _calibrationParams.vaneADCValues[WMK_ANGLE_22_5] = 1624;
-    _calibrationParams.vaneADCValues[WMK_ANGLE_45_0] = 1845;
-    _calibrationParams.vaneADCValues[WMK_ANGLE_67_5] = 335;
-    _calibrationParams.vaneADCValues[WMK_ANGLE_90_0] = 372;
-    _calibrationParams.vaneADCValues[WMK_ANGLE_112_5] = 264;
-    _calibrationParams.vaneADCValues[WMK_ANGLE_135_0] = 738;
-    _calibrationParams.vaneADCValues[WMK_ANGLE_157_5] = 506;
-    _calibrationParams.vaneADCValues[WMK_ANGLE_180_0] = 1149;
-    _calibrationParams.vaneADCValues[WMK_ANGLE_202_5] = 979;
-    _calibrationParams.vaneADCValues[WMK_ANGLE_225_0] = 2520;
-    _calibrationParams.vaneADCValues[WMK_ANGLE_247_5] = 2397;
-    _calibrationParams.vaneADCValues[WMK_ANGLE_270_0] = 3780;
-    _calibrationParams.vaneADCValues[WMK_ANGLE_292_5] = 3309;
-    _calibrationParams.vaneADCValues[WMK_ANGLE_315_0] = 3548;
-    _calibrationParams.vaneADCValues[WMK_ANGLE_337_5] = 2810;
-
-    // The SparkFun Weather Shield Values uses a slightly different circuit, the
-    // expected 12-bit values for it are specified here
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_0_0] = 3610;
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_22_5] = 2645;
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_45_0] = 2803;
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_67_5] = 1560;
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_90_0] = 1595;
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_112_5] = 1490;
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_135_0] = 1932;
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_157_5] = 1722;
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_180_0] = 2279;
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_202_5] = 2139;
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_225_0] = 3247;
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_247_5] = 3171;
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_270_0] = 3943;
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_292_5] = 3701;
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_315_0] = 3826;
-    // _calibrationParams.vaneADCValues[WMK_ANGLE_337_5] = 3422;
+    // results in 16 possible positions. Each position has a different resistor,
+    // resulting in different ADC values. The expected ADC values has been
+    // experiemntally determined for various platforms, see the constants file
+    _calibrationParams.vaneADCValues[WMK_ANGLE_0_0] = SFE_WMK_ADC_ANGLE_0_0;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_22_5] = SFE_WMK_ADC_ANGLE_22_5;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_45_0] = SFE_WMK_ADC_ANGLE_45_0;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_67_5] = SFE_WMK_ADC_ANGLE_67_5;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_90_0] = SFE_WMK_ADC_ANGLE_90_0;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_112_5] = SFE_WMK_ADC_ANGLE_112_5;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_135_0] = SFE_WMK_ADC_ANGLE_135_0;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_157_5] = SFE_WMK_ADC_ANGLE_157_5;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_180_0] = SFE_WMK_ADC_ANGLE_180_0;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_202_5] = SFE_WMK_ADC_ANGLE_202_5;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_225_0] = SFE_WMK_ADC_ANGLE_225_0;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_247_5] = SFE_WMK_ADC_ANGLE_247_5;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_270_0] = SFE_WMK_ADC_ANGLE_270_0;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_292_5] = SFE_WMK_ADC_ANGLE_292_5;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_315_0] = SFE_WMK_ADC_ANGLE_315_0;
+    _calibrationParams.vaneADCValues[WMK_ANGLE_337_5] = SFE_WMK_ADC_ANGLE_337_5;
 
     // Datasheet specifies 2.4kph of wind causes one trigger per second
     _calibrationParams.kphPerCountPerSec = 2.4;
@@ -120,7 +101,7 @@ void SFEWeatherMeterKit::setADCResolutionBits(uint8_t resolutionBits)
 {
     for(uint8_t i = 0; i < WMK_NUM_ANGLES; i++)
     {
-        int8_t bitShift = (SFE_WIND_VANE_ADC_RESOLUTION_DEFAULT) - resolutionBits;
+        int8_t bitShift = (SFE_WMK_ADC_RESOLUTION) - resolutionBits;
 
         if(bitShift > 0)
         {

@@ -2,31 +2,7 @@
 #define __SPARKFUN_WEATHER_METER_KIT_H__
 
 #include "Arduino.h"
-
-// Enum to define the indexes for each wind direction
-enum SFEWeatherMeterKitAnemometerAngles
-{
-    WMK_ANGLE_0_0 = 0,
-    WMK_ANGLE_22_5,
-    WMK_ANGLE_45_0,
-    WMK_ANGLE_67_5,
-    WMK_ANGLE_90_0,
-    WMK_ANGLE_112_5,
-    WMK_ANGLE_135_0,
-    WMK_ANGLE_157_5,
-    WMK_ANGLE_180_0,
-    WMK_ANGLE_202_5,
-    WMK_ANGLE_225_0,
-    WMK_ANGLE_247_5,
-    WMK_ANGLE_270_0,
-    WMK_ANGLE_292_5,
-    WMK_ANGLE_315_0,
-    WMK_ANGLE_337_5,
-    WMK_NUM_ANGLES
-};
-
-#define SFE_WIND_VANE_DEGREES_PER_INDEX (360.0 / WMK_NUM_ANGLES)
-#define SFE_WIND_VANE_ADC_RESOLUTION_DEFAULT 12
+#include "SparkFun_Weather_Meter_Kit_Constants.h"
 
 // Calibration parameters for each sensor
 struct SFEWeatherMeterKitCalibrationParams

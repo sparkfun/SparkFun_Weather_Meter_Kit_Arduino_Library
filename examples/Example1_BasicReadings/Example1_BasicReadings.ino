@@ -25,9 +25,18 @@ void setup()
     Serial.println("for operation, and may not be accurate for your project.");
     Serial.println("It is recommended to check out the calibration examples.");
 
-    // The library assumes a 12-bit ADC, but if yours is different, you can set
-    // the resolution here
-    weatherMeterKit.setADCResolutionBits(12);
+    // Expected ADC values have been defined for various platforms in the
+    // library, however your platform may not be included. This code will check
+    // if that's the case
+#ifdef SFE_WMK_PLAFTORM_UNKNOWN
+    // The platform you're using hasn't been added to the library, so the
+    // expected ADC values have been calculated assuming a 10k pullup resistor
+    // and a perfectly linear 16-bit ADC. Your ADC likely has a different
+    /// resolution, so you'll need to specify it here
+    Serial.println("Unknown platform! Please edit the code with your ADC resolution!");
+    Serial.println();
+    weatherMeterKit.setADCResolutionBits(10);
+#endif
 
     // Begin weather meter kit
     weatherMeterKit.begin();
