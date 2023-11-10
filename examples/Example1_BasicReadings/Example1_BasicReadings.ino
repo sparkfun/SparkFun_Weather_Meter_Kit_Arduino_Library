@@ -32,10 +32,11 @@ void setup()
     // The platform you're using hasn't been added to the library, so the
     // expected ADC values have been calculated assuming a 10k pullup resistor
     // and a perfectly linear 16-bit ADC. Your ADC likely has a different
-    /// resolution, so you'll need to specify it here
+    // resolution, so you'll need to specify it here:
+    weatherMeterKit.setADCResolutionBits(10);
+    
     Serial.println("Unknown platform! Please edit the code with your ADC resolution!");
     Serial.println();
-    weatherMeterKit.setADCResolutionBits(10);
 #endif
 
     // Begin weather meter kit
