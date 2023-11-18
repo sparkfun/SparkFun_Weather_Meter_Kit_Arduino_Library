@@ -265,7 +265,7 @@ float SFEWeatherMeterKit::getTotalRainfall()
     return _rainfallCounts * _calibrationParams.mmPerRainfallCount;
 }
 
-/// @brief Resets the total rainfall
+/// @brief Resets the wind speed
 void SFEWeatherMeterKit::resetWindSpeedFilter()
 {
     _windCountsPrevious = 0;
