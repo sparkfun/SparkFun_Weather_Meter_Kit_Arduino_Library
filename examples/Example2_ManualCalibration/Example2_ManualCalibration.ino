@@ -19,13 +19,13 @@ void setup()
 {
     // Begin serial
     Serial.begin(115200);
-    Serial.println("SparkFun Weather Meter Kit Example 2 - Manual Calibration");
+    Serial.println(F("SparkFun Weather Meter Kit Example 2 - Manual Calibration"));
     Serial.println();
-    Serial.println("Note - this example demonstrates how to manually set the");
-    Serial.println("calibration parameters once you know what they are for your");
-    Serial.println("set up. If you don't know what values to use, check out");
-    Serial.println("Example 3, which walks you through it! The values used in");
-    Serial.println("this example are all defaults, so you may need to change them.");
+    Serial.println(F("Note - this example demonstrates how to manually set the"));
+    Serial.println(F("calibration parameters once you know what they are for your"));
+    Serial.println(F("set up. If you don't know what values to use, check out"));
+    Serial.println(F("Example 3, which walks you through it! The values used in"));
+    Serial.println(F("this example are all defaults, so you may need to change them."));
 
     // Here we create a struct to hold all the calibration parameters
     SFEWeatherMeterKitCalibrationParams calibrationParams = weatherMeterKit.getCalibrationParams();
@@ -88,13 +88,13 @@ void setup()
 void loop()
 {
     // Print data from weather meter kit
-    Serial.print("Wind direction (degrees): ");
+    Serial.print(F("Wind direction (degrees): "));
     Serial.print(weatherMeterKit.getWindDirection(), 1);
-    Serial.print("\t\t");
-    Serial.print("Wind speed (kph): ");
+    Serial.print(F("\t\t"));
+    Serial.print(F("Wind speed (kph): "));
     Serial.print(weatherMeterKit.getWindSpeed(), 1);
-    Serial.print("\t\t");
-    Serial.print("Total rainfall (mm): ");
+    Serial.print(F("\t\t"));
+    Serial.print(F("Total rainfall (mm): "));
     Serial.println(weatherMeterKit.getTotalRainfall(), 1);
 
     // Only print once per second

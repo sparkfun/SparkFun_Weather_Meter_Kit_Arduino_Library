@@ -19,11 +19,11 @@ void setup()
 {
     // Begin serial
     Serial.begin(115200);
-    Serial.println("SparkFun Weather Meter Kit Example 1 - Basic Readings");
+    Serial.println(F("SparkFun Weather Meter Kit Example 1 - Basic Readings"));
     Serial.println();
-    Serial.println("Note - this example demonstrates the minimum code required");
-    Serial.println("for operation, and may not be accurate for your project.");
-    Serial.println("It is recommended to check out the calibration examples.");
+    Serial.println(F("Note - this example demonstrates the minimum code required"));
+    Serial.println(F("for operation, and may not be accurate for your project."));
+    Serial.println(F("It is recommended to check out the calibration examples."));
 
     // Expected ADC values have been defined for various platforms in the
     // library, however your platform may not be included. This code will check
@@ -35,7 +35,7 @@ void setup()
     // resolution, so you'll need to specify it here:
     weatherMeterKit.setADCResolutionBits(10);
     
-    Serial.println("Unknown platform! Please edit the code with your ADC resolution!");
+    Serial.println(F("Unknown platform! Please edit the code with your ADC resolution!"));
     Serial.println();
 #endif
 
@@ -46,13 +46,13 @@ void setup()
 void loop()
 {
     // Print data from weather meter kit
-    Serial.print("Wind direction (degrees): ");
+    Serial.print(F("Wind direction (degrees): "));
     Serial.print(weatherMeterKit.getWindDirection(), 1);
-    Serial.print("\t\t");
-    Serial.print("Wind speed (kph): ");
+    Serial.print(F("\t\t"));
+    Serial.print(F("Wind speed (kph): "));
     Serial.print(weatherMeterKit.getWindSpeed(), 1);
-    Serial.print("\t\t");
-    Serial.print("Total rainfall (mm): ");
+    Serial.print(F("\t\t"));
+    Serial.print(F("Total rainfall (mm): "));
     Serial.println(weatherMeterKit.getTotalRainfall(), 1);
 
     // Only print once per second

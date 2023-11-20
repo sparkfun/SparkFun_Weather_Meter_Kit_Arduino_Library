@@ -22,11 +22,11 @@ void setup()
 {
     // Begin serial
     Serial.begin(115200);
-    Serial.println("SparkFun Weather Meter Kit Example 3 - Calibration Helper");
+    Serial.println(F("SparkFun Weather Meter Kit Example 3 - Calibration Helper"));
     Serial.println();
-    Serial.println("This example will help you determine the best calibration");
-    Serial.println("parameters to use for your project. Once each section is done,");
-    Serial.println("the values will be printed for you to copy into your sketch.");
+    Serial.println(F("This example will help you determine the best calibration"));
+    Serial.println(F("parameters to use for your project. Once each section is done,"));
+    Serial.println(F("the values will be printed for you to copy into your sketch."));
 
     // We'll be changing the calibration parameters one at a time, so we'll get
     // all the default values now
@@ -39,20 +39,20 @@ void setup()
     runCalibrationHelper();
 
     Serial.println();
-    Serial.println("Calibration done! Enter any key to continue");
+    Serial.println(F("Calibration done! Enter any key to continue"));
     waitForUserInput();
 }
 
 void loop()
 {
     // Print data from weather meter kit
-    Serial.print("Wind direction (degrees): ");
+    Serial.print(F("Wind direction (degrees): "));
     Serial.print(weatherMeterKit.getWindDirection(), 1);
-    Serial.print("\t\t");
-    Serial.print("Wind speed (kph): ");
+    Serial.print(F("\t\t"));
+    Serial.print(F("Wind speed (kph): "));
     Serial.print(weatherMeterKit.getWindSpeed(), 1);
-    Serial.print("\t\t");
-    Serial.print("Total rainfall (mm): ");
+    Serial.print(F("\t\t"));
+    Serial.print(F("Total rainfall (mm): "));
     Serial.println(weatherMeterKit.getTotalRainfall(), 1);
 
     // Only print once per second
@@ -70,19 +70,19 @@ void runCalibrationHelper()
 void runVaneCalibrationHelper()
 {
     Serial.println();
-    Serial.println("Wind vane calibration!");
+    Serial.println(F("Wind vane calibration!"));
 
     Serial.println();
-    Serial.println("The wind vane has several switches, each with different");
-    Serial.println("resistors connected to GND. This library assumes there's an");
-    Serial.println("external resistor connected to VCC creating a voltage divider;");
-    Serial.println("the voltage is measured and compared with expected voltages");
-    Serial.println("for each direction. The expected voltages may need to be tuned,");
-    Serial.println("which this part walks you through. Hold the wind vane at the");
-    Serial.println("specified angle, then enter any key once steady. Pay close");
-    Serial.println("attention to the measured ADC value to see when it changes,");
-    Serial.println("especially around the 22.5 degree increments, they're very");
-    Serial.println("narrow! Enter any key to begin.");
+    Serial.println(F("The wind vane has several switches, each with different"));
+    Serial.println(F("resistors connected to GND. This library assumes there's an"));
+    Serial.println(F("external resistor connected to VCC creating a voltage divider;"));
+    Serial.println(F("the voltage is measured and compared with expected voltages"));
+    Serial.println(F("for each direction. The expected voltages may need to be tuned,"));
+    Serial.println(F("which this part walks you through. Hold the wind vane at the"));
+    Serial.println(F("specified angle, then enter any key once steady. Pay close"));
+    Serial.println(F("attention to the measured ADC value to see when it changes,"));
+    Serial.println(F("especially around the 22.5 degree increments, they're very"));
+    Serial.println(F("narrow! Enter any key to begin."));
 
     // Wait for user to begin
     waitForUserInput();
@@ -97,12 +97,12 @@ void runVaneCalibrationHelper()
         clearUserInput();
         while (Serial.available() == 0)
         {
-            Serial.print("Hold wind vane at ");
+            Serial.print(F("Hold wind vane at "));
             Serial.print(currentAngle, 1);
-            Serial.print(" degrees. Enter any key when in position.");
-            Serial.print("    Measured ADC: ");
+            Serial.print(F(" degrees. Enter any key when in position."));
+            Serial.print(F("    Measured ADC: "));
             Serial.print(analogRead(windDirectionPin));
-            Serial.print("    Measured direction (degrees): ");
+            Serial.print(F("    Measured direction (degrees): "));
             Serial.println(weatherMeterKit.getWindDirection(), 1);
 
             // Print moderately quickly so user can catch any brief changes
@@ -116,9 +116,9 @@ void runVaneCalibrationHelper()
 
         // Print value for user to see
         Serial.println();
-        Serial.print("Setting expected ADC value for ");
+        Serial.print(F("Setting expected ADC value for "));
         Serial.print(currentAngle);
-        Serial.print(" degrees to ");
+        Serial.print(F(" degrees to "));
         Serial.println(measuredADC);
         Serial.println();
 
@@ -129,7 +129,7 @@ void runVaneCalibrationHelper()
     // Print the ADC value saved for each angle again so the user has it all in
     // one place
     Serial.println();
-    Serial.println("Here are the ADC values set for each angle:");
+    Serial.println(F("Here are the ADC values set for each angle:"));
     Serial.println();
     for (int i = 0; i < WMK_NUM_ANGLES; i++)
     {
@@ -138,31 +138,31 @@ void runVaneCalibrationHelper()
 
         // Print this angle / ADC pair
         Serial.print(currentAngle, 1);
-        Serial.print(" degrees: ");
+        Serial.print(F(" degrees: "));
         Serial.println(calibrationParams.vaneADCValues[i]);
     }
 
     Serial.println();
-    Serial.println("Wind vane calibration complete!");
+    Serial.println(F("Wind vane calibration complete!"));
 }
 
 void runRainfallCalibrationHelper()
 {
     Serial.println();
-    Serial.println("Rainfall calibration!");
+    Serial.println(F("Rainfall calibration!"));
 
     // Rainfall calibration
     Serial.println();
-    Serial.println("The rainfall detector contains a small cup that collects rain");
-    Serial.println("water. When the cup fills, the water gets dumped out and a");
-    Serial.println("counter is incremented. The exact volume of this cup needs to");
-    Serial.println("be known to get an accurate measurement of the total rainfall.");
-    Serial.println("To calibrate this value, you'll need to pour a known volume");
-    Serial.println("of water into the rainfall detector, and the cup volume will");
-    Serial.println("be calculated. The rate at which the water is poured can");
-    Serial.println("affect the measurement, so go very slowly to simulate actual");
-    Serial.println("rain rather than dumping it all at once!");
-    Serial.println("Enter any key once you're ready to begin");
+    Serial.println(F("The rainfall detector contains a small cup that collects rain"));
+    Serial.println(F("water. When the cup fills, the water gets dumped out and a"));
+    Serial.println(F("counter is incremented. The exact volume of this cup needs to"));
+    Serial.println(F("be known to get an accurate measurement of the total rainfall."));
+    Serial.println(F("To calibrate this value, you'll need to pour a known volume"));
+    Serial.println(F("of water into the rainfall detector, and the cup volume will"));
+    Serial.println(F("be calculated. The rate at which the water is poured can"));
+    Serial.println(F("affect the measurement, so go very slowly to simulate actual"));
+    Serial.println(F("rain rather than dumping it all at once!"));
+    Serial.println(F("Enter any key once you're ready to begin"));
 
     // Wait for user to begin
     waitForUserInput();
@@ -171,17 +171,17 @@ void runRainfallCalibrationHelper()
     weatherMeterKit.resetTotalRainfall();
 
     Serial.println();
-    Serial.println("Begin pouring!");
+    Serial.println(F("Begin pouring!"));
     Serial.println();
 
     // Wait for user to finish
     clearUserInput();
     while (Serial.available() == 0)
     {
-        Serial.print("Enter any key once finished pouring.");
-        Serial.print("    Number of counts: ");
+        Serial.print(F("Enter any key once finished pouring."));
+        Serial.print(F("    Number of counts: "));
         Serial.print(weatherMeterKit.getRainfallCounts());
-        Serial.print("    Measured rainfall (mm): ");
+        Serial.print(F("    Measured rainfall (mm): "));
         Serial.println(weatherMeterKit.getTotalRainfall(), 1);
 
         // Print slowly
@@ -189,7 +189,7 @@ void runRainfallCalibrationHelper()
     }
 
     Serial.println();
-    Serial.println("Now enter the volume of water poured in mL");
+    Serial.println(F("Now enter the volume of water poured in mL"));
     waitForUserInput();
     int totalWaterML = Serial.parseInt();
 
@@ -209,26 +209,26 @@ void runRainfallCalibrationHelper()
 
     // Print value for user to see
     Serial.println();
-    Serial.print("Setting mm per count to ");
+    Serial.print(F("Setting mm per count to "));
     Serial.println(mmPerCount, 4);
 
     Serial.println();
-    Serial.println("Rainfall calibration complete!");
+    Serial.println(F("Rainfall calibration complete!"));
 }
 
 void runAnemometerCalibrationHelper()
 {
     Serial.println();
-    Serial.println("Anemometer calibration!");
+    Serial.println(F("Anemometer calibration!"));
     
     Serial.println();
-    Serial.println("This part will require you to place the anemometer in a");
-    Serial.println("constant wind stream for a few seconds, and you'll need to");
-    Serial.println("know or the wind speed or measure it with a calibrated");
-    Serial.println("anemometer (these can be purchased for relatively low cost).");
-    Serial.println("Enter the number of seconds you wish to run this calibration.");
-    Serial.println("Longer will be more accurate, but the wind speed is more");
-    Serial.println("likely to fluctuate (10 seconds is recommended)");
+    Serial.println(F("This part will require you to place the anemometer in a"));
+    Serial.println(F("constant wind stream for a few seconds, and you'll need to"));
+    Serial.println(F("know or the wind speed or measure it with a calibrated"));
+    Serial.println(F("anemometer (these can be purchased for relatively low cost)."));
+    Serial.println(F("Enter the number of seconds you wish to run this calibration."));
+    Serial.println(F("Longer will be more accurate, but the wind speed is more"));
+    Serial.println(F("likely to fluctuate (10 seconds is recommended)"));
     waitForUserInput();
     int calibrationSeconds = Serial.parseInt();
 
@@ -237,8 +237,8 @@ void runAnemometerCalibrationHelper()
     weatherMeterKit.setCalibrationParams(calibrationParams);
     
     Serial.println();
-    Serial.println("Now place the anemometer in a constant wind stream, and");
-    Serial.println("enter any key when ready to begin calibration");
+    Serial.println(F("Now place the anemometer in a constant wind stream, and"));
+    Serial.println(F("enter any key when ready to begin calibration"));
     waitForUserInput();
 
     // Reset the wind speed filter to start the calibration period
@@ -249,7 +249,7 @@ void runAnemometerCalibrationHelper()
     for(int i = 0; i < calibrationSeconds; i++)
     {
         // Print time remaining
-        Serial.print("Seconds remaining: ");
+        Serial.print(F("Seconds remaining: "));
         Serial.println(calibrationSeconds - i);
 
         // 1 second intervals
@@ -266,8 +266,8 @@ void runAnemometerCalibrationHelper()
     calibrationParams.windSpeedMeasurementPeriodMillis = 1000;
     
     Serial.println();
-    Serial.println("Calibration period finished! Enter the average wind speed");
-    Serial.println("during the calibration period in kph");
+    Serial.println(F("Calibration period finished! Enter the average wind speed"));
+    Serial.println(F("during the calibration period in kph"));
     waitForUserInput();
     float windSpeed = Serial.parseFloat();
 
@@ -277,11 +277,11 @@ void runAnemometerCalibrationHelper()
 
     // Print value for user to see
     Serial.println();
-    Serial.print("Setting kph per count per second to ");
+    Serial.print(F("Setting kph per count per second to "));
     Serial.println(calibrationParams.kphPerCountPerSec, 2);
 
     Serial.println();
-    Serial.println("Anemometer calibration complete!");
+    Serial.println(F("Anemometer calibration complete!"));
 }
 
 void clearUserInput()
