@@ -47,7 +47,7 @@ enum SFEWeatherMeterKitAnemometerAngles
     #define SFE_WMK_ADC_ANGLE_337_5 855
 
     #define SFE_WMK_ADC_RESOLUTION 10
-#elif ESP32
+#elif defined(ESP32)
     // Tested with ESP32 processor board installed on Weather Carrier
     #define SFE_WMK_ADC_ANGLE_0_0 3118
     #define SFE_WMK_ADC_ANGLE_22_5 1526
